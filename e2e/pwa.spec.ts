@@ -23,6 +23,25 @@ test('FR-2 app shell loads offline after first visit', async ({ page, context, b
   await context.setOffline(true);
   await page.reload();
   await expect(page.locator('.tile')).toHaveCount(4);
-  await page.goto('/action/1'); // navigation fallback
-  await expect(page.getByRole('heading', { name: 'Action 1' })).toBeVisible();
+});
+
+test('FR-18 section grids and detail screens open offline after first visit', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName === 'webkit', 'Playwright WebKit does not support service workers');
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await context.setOffline(true);
+  await page.goto('/learn/consonants'); // navigation fallback + precached lazy chunks
+  await expect(page.getByRole('link', { name: 'ಕ, ka' })).toBeVisible();
+  await page.getByRole('link', { name: 'ಕ, ka' }).click();
+  await expect(page.getByTestId('glyph')).toHaveText('ಕ');
+  await page.goto('/learn/words/mango');
+  await expect(page.getByTestId('glyph')).toHaveText('ಮಾವಿನಹಣ್ಣು');
 });

@@ -30,7 +30,7 @@ export interface Section { id: SectionId; titleKn: string; titleEn: string; kind
 | File | Content | Groups |
 |---|---|---|
 | `vowels.ts` | 15 items (FR-12) | 1 untitled group |
-| `consonants.ts` | 34 items (FR-13) | 5 varga groups with `columns: 5`, titled ಕ-ವರ್ಗ … ಪ-ವರ್ಗ, + ಅವರ್ಗೀಯ |
+| `consonants.ts` | 34 items (FR-13) | 5 varga groups with `columns: 5`, titled ಕ-ವರ್ಗ … ಪ-ವರ್ಗ (English subtitles Velar, Palatal, Retroflex, Dental, Labial), + ಅವರ್ಗೀಯ (Non-grouped) |
 | `numbers.ts` | 11 items: digit in `kn`, number word in `word`, plus `value` (FR-14) | 1 untitled group |
 | `words.ts` | 40 items with `en` (FR-15) | 5 titled categories |
 | `index.ts` | `sections: Record<SectionId, Section>`, `findSection(id)`, `findItem(section, itemId)` | — |
@@ -61,7 +61,7 @@ src/screens/
                      per group: optional <h2> (kn + en), then <ul class="card-grid" style="--cols:N">
                      card = <a class="card" href={paths.item(...)} aria-label="ಕ, ka">…</a>
   ItemDetail.tsx     lazy. findItem → <NotFound/> if missing
-                     <BackLink fallback={paths.section(section)}/>
+                     header: <BackLink fallback={paths.section(section)}/> + section title (kn + en)
                      <p class="glyph glyph--{kind}" lang="kn">{kn}</p>
                      <p class="caption">{word · roman · value | roman · en}</p>
   ActionStub.tsx     deleted
