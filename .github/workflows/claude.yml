@@ -31,7 +31,7 @@ jobs:
       - name: Skip when no model key is configured
         if: env.OPENROUTER_API_KEY == ''
         run: echo "::notice::OPENROUTER_API_KEY not set; skipping @claude."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: env.OPENROUTER_API_KEY != ''
         with: { fetch-depth: 0 }
       - uses: anthropics/claude-code-action@v1
