@@ -16,6 +16,8 @@ test('FR-6 missing IndexedDB shows the storage failure shell', async ({ page }) 
 
 test('FR-5 Reload recovers once the cause is gone', async ({ page }) => {
   await page.goto('/?__nodb=1');
+  // Wait until the app has read ?__nodb before dropping it, or WebKit can race and open the DB normally.
+  await expect(page.getByRole('heading', { name: 'Storage unavailable' })).toBeVisible();
   await page.evaluate(() => history.replaceState(null, '', '/'));
   await page.getByRole('button', { name: 'Reload' }).click();
   await expect(page.locator('.tile')).toHaveCount(4);
