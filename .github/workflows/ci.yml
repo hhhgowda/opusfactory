@@ -69,6 +69,7 @@ jobs:
     if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
+      contents: read # checkout of a private repo
       issues: write
     steps:
       - uses: actions/checkout@v4

@@ -3,7 +3,11 @@
     "collect": {
       "staticDistDir": "./dist",
       "numberOfRuns": 3,
-      "settings": { "preset": "perf", "formFactor": "mobile", "screenEmulation": { "mobile": true } }
+      "settings": {
+        "onlyCategories": ["performance", "accessibility", "best-practices"],
+        "formFactor": "mobile",
+        "screenEmulation": { "mobile": true }
+      }
     },
     "assert": {
       "assertions": {
