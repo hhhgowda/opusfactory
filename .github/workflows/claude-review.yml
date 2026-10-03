@@ -1,5 +1,6 @@
 # AI in the PR review loop (playbook Deploy stage). First-pass agentic review; humans approve.
-# Requires repo secret ANTHROPIC_API_KEY (or install the Claude GitHub app: `/install-github-app` in Claude Code).
+# Model access goes through OpenRouter (ADR 0004): repo secret OPENROUTER_API_KEY, optional repo variable
+# REVIEW_MODEL (default z-ai/glm-5.3-flash). Without the secret (e.g. fork PRs) the job skips instead of failing.
 name: Claude PR review
 
 on:
@@ -17,12 +18,30 @@ jobs:
     # Dependabot runs get no repo secrets, so skip them rather than fail.
     if: github.event.pull_request.draft == false && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'z-ai/glm-5.3-flash' }}
     steps:
+      - name: Skip when no model key is configured
+        if: env.OPENROUTER_API_KEY == ''
+        run: echo "::notice::OPENROUTER_API_KEY not set; skipping AI review."
       - uses: actions/checkout@v4
+        if: env.OPENROUTER_API_KEY != ''
         with: { fetch-depth: 0 }
       - uses: anthropics/claude-code-action@v1
+        if: env.OPENROUTER_API_KEY != ''
+        env:
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+          # Route every model tier to the chosen model so background calls are billed at the same rate.
+          ANTHROPIC_MODEL: ${{ env.REVIEW_MODEL }}
+          ANTHROPIC_DEFAULT_OPUS_MODEL: ${{ env.REVIEW_MODEL }}
+          ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ env.REVIEW_MODEL }}
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ env.REVIEW_MODEL }}
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          # Use the workflow token instead of the Claude GitHub App.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           track_progress: true
           prompt: |
             REPO: ${{ github.repository }}  PR: ${{ github.event.pull_request.number }}
