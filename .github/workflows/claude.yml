@@ -14,7 +14,6 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
-  id-token: write
 
 jobs:
   claude:
@@ -26,11 +25,17 @@ jobs:
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
     runs-on: ubuntu-latest
     env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
       REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'z-ai/glm-5.3-flash' }}
     steps:
+      - name: Skip when no model key is configured
+        if: env.OPENROUTER_API_KEY == ''
+        run: echo "::notice::OPENROUTER_API_KEY not set; skipping @claude."
       - uses: actions/checkout@v4
+        if: env.OPENROUTER_API_KEY != ''
         with: { fetch-depth: 0 }
       - uses: anthropics/claude-code-action@v1
+        if: env.OPENROUTER_API_KEY != ''
         env:
           ANTHROPIC_BASE_URL: https://openrouter.ai/api
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
@@ -39,5 +44,6 @@ jobs:
           ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ env.REVIEW_MODEL }}
           ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ env.REVIEW_MODEL }}
         with:
+          # The action needs this input to start; requests authenticate via ANTHROPIC_AUTH_TOKEN (OpenRouter docs).
           anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}

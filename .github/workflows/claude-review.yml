@@ -11,7 +11,6 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
-  id-token: write
 
 jobs:
   review:
@@ -39,6 +38,7 @@ jobs:
           ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ env.REVIEW_MODEL }}
           ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ env.REVIEW_MODEL }}
         with:
+          # The action needs this input to start; requests authenticate via ANTHROPIC_AUTH_TOKEN (OpenRouter docs).
           anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
           # Use the workflow token instead of the Claude GitHub App.
           github_token: ${{ secrets.GITHUB_TOKEN }}
