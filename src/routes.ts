@@ -3,10 +3,12 @@ const BASE = import.meta.env.BASE_URL; // always ends with '/'
 
 export const routes = {
   home: BASE,
-  action: `${BASE}action/:id`,
+  section: `${BASE}learn/:section`,
+  item: `${BASE}learn/:section/:item`,
 } as const;
 
 export const paths = {
   home: () => BASE,
-  action: (id: string | number) => `${BASE}action/${id}`,
+  section: (section: string) => `${BASE}learn/${section}`,
+  item: (section: string, item: string) => `${BASE}learn/${section}/${item}`,
 };

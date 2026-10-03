@@ -15,20 +15,12 @@ test.describe('landing', () => {
     for (const b of boxes) expect(Math.min(b.width, b.height)).toBeGreaterThanOrEqual(44);
   });
 
-  test('FR-4 a tile opens its stub screen and Back returns', async ({ page }) => {
+  test('FR-10 tiles show Kannada and English labels and open their section', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: /Action 2/ }).click();
-    await expect(page).toHaveURL(/\/action\/2$/);
-    await expect(page.getByRole('heading', { name: 'Action 2' })).toBeVisible();
-    await page.getByRole('link', { name: 'Back' }).click();
-    await expect(page).toHaveURL(/\/$/);
-    await expect(page.locator('.tile')).toHaveCount(4);
-  });
-
-  test('FR-4 deep link to a stub then Back goes home', async ({ page }) => {
-    await page.goto('/action/4');
-    await expect(page.getByRole('heading', { name: 'Action 4' })).toBeVisible();
-    await page.getByRole('link', { name: 'Back' }).click();
-    await expect(page.locator('.tile')).toHaveCount(4);
+    await expect(page.locator('.tile-label')).toHaveText(['ಸ್ವರಗಳು', 'ವ್ಯಂಜನಗಳು', 'ಸಂಖ್ಯೆಗಳು', 'ಪದಗಳು']);
+    await expect(page.locator('.tile-label-en')).toHaveText(['Vowels', 'Consonants', 'Numbers', 'Words']);
+    await page.getByRole('link', { name: /Numbers/ }).click();
+    await expect(page).toHaveURL(/\/learn\/numbers$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'ಸಂಖ್ಯೆಗಳು' })).toBeVisible();
   });
 });

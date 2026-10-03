@@ -1,5 +1,5 @@
 // Every functional requirement verified by an automated test must have a test named with its ID.
-// Runs in CI (checks job). Requirements marked "manual" in the "Verified by" column are skipped.
+// Runs in CI (checks job). Requirements marked "manual" or "superseded" in the "Verified by" column are skipped.
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -27,7 +27,7 @@ for (const file of reqFiles) {
     if (!m) continue;
     const cells = line.split('|').map((c) => c.trim());
     const verifiedBy = cells[cells.length - 2] ?? '';
-    if (/^manual/i.test(verifiedBy)) continue;
+    if (/^(manual|superseded)/i.test(verifiedBy)) continue;
     checked++;
     if (!new RegExp(`['"\`]${m[1]}\\b`).test(testText)) missing.push(`${m[1]} (${file})`);
   }

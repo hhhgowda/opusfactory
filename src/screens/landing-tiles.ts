@@ -1,19 +1,22 @@
+import type { SectionId } from '../content/types';
+
 /**
- * Landing page tiles (FR-3). Future intents change labels/targets here, not in Landing.tsx.
- * Keep exactly four entries while the layout is a 2×2 grid.
+ * Landing page tiles (FR-3 layout, FR-10 labels). Future intents change labels/targets here,
+ * not in Landing.tsx. Keep exactly four entries while the layout is a 2×2 grid.
  */
 export interface LandingTile {
-  id: string;
-  label: string;
-  /** Short hint shown under the label. */
-  hint?: string;
-  /** Emoji or single glyph used as the tile icon. */
+  id: SectionId;
+  /** Line 1, Kannada. */
+  labelKn: string;
+  /** Line 2, English. */
+  labelEn: string;
+  /** Kannada glyph used as the tile icon. */
   icon: string;
 }
 
 export const landingTiles: LandingTile[] = [
-  { id: '1', label: 'Action 1', hint: 'Coming soon', icon: '①' },
-  { id: '2', label: 'Action 2', hint: 'Coming soon', icon: '②' },
-  { id: '3', label: 'Action 3', hint: 'Coming soon', icon: '③' },
-  { id: '4', label: 'Action 4', hint: 'Coming soon', icon: '④' },
+  { id: 'vowels', labelKn: 'ಸ್ವರಗಳು', labelEn: 'Vowels', icon: 'ಅ' },
+  { id: 'consonants', labelKn: 'ವ್ಯಂಜನಗಳು', labelEn: 'Consonants', icon: 'ಕ' },
+  { id: 'numbers', labelKn: 'ಸಂಖ್ಯೆಗಳು', labelEn: 'Numbers', icon: '೧' },
+  { id: 'words', labelKn: 'ಪದಗಳು', labelEn: 'Words', icon: 'ಪದ' },
 ];

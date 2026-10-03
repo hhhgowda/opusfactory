@@ -2,16 +2,19 @@ import { useLocation } from 'preact-iso';
 import { hasInAppHistory } from '../nav';
 import { paths } from '../routes';
 
-/** Back control: uses history when we navigated in-app, otherwise goes home (e.g. deep link / cold start). */
-export function BackLink() {
+/**
+ * Back control: uses history when we navigated in-app, otherwise goes to `fallback`
+ * (home by default) — e.g. after a deep link or cold start (FR-16).
+ */
+export function BackLink({ fallback = paths.home() }: { fallback?: string }) {
   const { route } = useLocation();
   const onClick = (e: MouseEvent) => {
     e.preventDefault();
     if (hasInAppHistory()) history.back();
-    else route(paths.home());
+    else route(fallback);
   };
   return (
-    <a href={paths.home()} class="back-link" onClick={onClick}>
+    <a href={fallback} class="back-link" onClick={onClick}>
       <svg
         viewBox="0 0 24 24"
         width="24"

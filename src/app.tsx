@@ -7,7 +7,8 @@ import { routes } from './routes';
 import { Landing } from './screens/Landing';
 import { NotFound } from './screens/NotFound';
 
-const ActionStub = lazy(() => import('./screens/ActionStub').then((m) => m.ActionStub));
+const Section = lazy(() => import('./screens/Section').then((m) => m.Section));
+const ItemDetail = lazy(() => import('./screens/ItemDetail').then((m) => m.ItemDetail));
 
 /** Dev/E2E hook: `?__crash=1` throws during render to exercise the failure shell (FR-5). */
 function CrashProbe() {
@@ -28,7 +29,8 @@ export function App() {
           <RouteErrorBoundary>
             <Router onRouteChange={trackRouteChange}>
               <Route path={routes.home} component={Landing} />
-              <Route path={routes.action} component={ActionStub} />
+              <Route path={routes.section} component={Section} />
+              <Route path={routes.item} component={ItemDetail} />
               <Route default component={NotFound} />
             </Router>
           </RouteErrorBoundary>

@@ -1,0 +1,86 @@
+import type { Section } from './types';
+
+/** FR-15 — ಪದಗಳು: 40 words in 5 categories, transcribed from the approved content-draft.md. */
+export const words: Section = {
+  id: 'words',
+  titleKn: 'ಪದಗಳು',
+  titleEn: 'Words',
+  kind: 'word',
+  groups: [
+    {
+      id: 'family',
+      titleKn: 'ಕುಟುಂಬ',
+      titleEn: 'Family',
+      items: [
+        { id: 'mother', kn: 'ಅಮ್ಮ', roman: 'amma', en: 'mother' },
+        { id: 'father', kn: 'ಅಪ್ಪ', roman: 'appa', en: 'father' },
+        { id: 'elder-brother', kn: 'ಅಣ್ಣ', roman: 'aṇṇa', en: 'elder brother' },
+        { id: 'elder-sister', kn: 'ಅಕ್ಕ', roman: 'akka', en: 'elder sister' },
+        { id: 'younger-brother', kn: 'ತಮ್ಮ', roman: 'tamma', en: 'younger brother' },
+        { id: 'younger-sister', kn: 'ತಂಗಿ', roman: 'taṅgi', en: 'younger sister' },
+        { id: 'grandfather', kn: 'ಅಜ್ಜ', roman: 'ajja', en: 'grandfather' },
+        { id: 'grandmother', kn: 'ಅಜ್ಜಿ', roman: 'ajji', en: 'grandmother' },
+      ],
+    },
+    {
+      id: 'colours',
+      titleKn: 'ಬಣ್ಣಗಳು',
+      titleEn: 'Colours',
+      items: [
+        { id: 'red', kn: 'ಕೆಂಪು', roman: 'kempu', en: 'red' },
+        { id: 'green', kn: 'ಹಸಿರು', roman: 'hasiru', en: 'green' },
+        { id: 'blue', kn: 'ನೀಲಿ', roman: 'nīli', en: 'blue' },
+        { id: 'yellow', kn: 'ಹಳದಿ', roman: 'haḷadi', en: 'yellow' },
+        { id: 'white', kn: 'ಬಿಳಿ', roman: 'biḷi', en: 'white' },
+        { id: 'black', kn: 'ಕಪ್ಪು', roman: 'kappu', en: 'black' },
+        { id: 'orange', kn: 'ಕಿತ್ತಳೆ', roman: 'kittaḷe', en: 'orange' },
+        { id: 'purple', kn: 'ನೇರಳೆ', roman: 'nēraḷe', en: 'purple' },
+      ],
+    },
+    {
+      id: 'animals',
+      titleKn: 'ಪ್ರಾಣಿಗಳು',
+      titleEn: 'Animals',
+      items: [
+        { id: 'dog', kn: 'ನಾಯಿ', roman: 'nāyi', en: 'dog' },
+        { id: 'cat', kn: 'ಬೆಕ್ಕು', roman: 'bekku', en: 'cat' },
+        { id: 'cow', kn: 'ಹಸು', roman: 'hasu', en: 'cow' },
+        { id: 'elephant', kn: 'ಆನೆ', roman: 'āne', en: 'elephant' },
+        { id: 'horse', kn: 'ಕುದುರೆ', roman: 'kudure', en: 'horse' },
+        { id: 'tiger', kn: 'ಹುಲಿ', roman: 'huli', en: 'tiger' },
+        { id: 'monkey', kn: 'ಕೋತಿ', roman: 'kōti', en: 'monkey' },
+        { id: 'fish', kn: 'ಮೀನು', roman: 'mīnu', en: 'fish' },
+      ],
+    },
+    {
+      id: 'food',
+      titleKn: 'ಆಹಾರ',
+      titleEn: 'Food',
+      items: [
+        { id: 'water', kn: 'ನೀರು', roman: 'nīru', en: 'water' },
+        { id: 'milk', kn: 'ಹಾಲು', roman: 'hālu', en: 'milk' },
+        { id: 'rice', kn: 'ಅನ್ನ', roman: 'anna', en: 'cooked rice' },
+        { id: 'flatbread', kn: 'ರೊಟ್ಟಿ', roman: 'roṭṭi', en: 'flatbread' },
+        { id: 'fruit', kn: 'ಹಣ್ಣು', roman: 'haṇṇu', en: 'fruit' },
+        { id: 'banana', kn: 'ಬಾಳೆಹಣ್ಣು', roman: 'bāḷehaṇṇu', en: 'banana' },
+        { id: 'mango', kn: 'ಮಾವಿನಹಣ್ಣು', roman: 'māvinahaṇṇu', en: 'mango' },
+        { id: 'curd', kn: 'ಮೊಸರು', roman: 'mosaru', en: 'curd / yogurt' },
+      ],
+    },
+    {
+      id: 'body',
+      titleKn: 'ದೇಹ',
+      titleEn: 'Body',
+      items: [
+        { id: 'head', kn: 'ತಲೆ', roman: 'tale', en: 'head' },
+        { id: 'eye', kn: 'ಕಣ್ಣು', roman: 'kaṇṇu', en: 'eye' },
+        { id: 'ear', kn: 'ಕಿವಿ', roman: 'kivi', en: 'ear' },
+        { id: 'nose', kn: 'ಮೂಗು', roman: 'mūgu', en: 'nose' },
+        { id: 'mouth', kn: 'ಬಾಯಿ', roman: 'bāyi', en: 'mouth' },
+        { id: 'hand', kn: 'ಕೈ', roman: 'kai', en: 'hand' },
+        { id: 'leg', kn: 'ಕಾಲು', roman: 'kālu', en: 'leg / foot' },
+        { id: 'tooth', kn: 'ಹಲ್ಲು', roman: 'hallu', en: 'tooth' },
+      ],
+    },
+  ],
+};

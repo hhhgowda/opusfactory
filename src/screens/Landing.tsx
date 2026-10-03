@@ -9,12 +9,14 @@ export function Landing() {
       </header>
       <nav class="tile-grid" aria-label="Main actions">
         {landingTiles.map((tile) => (
-          <a key={tile.id} class="tile" href={paths.action(tile.id)} data-testid={`tile-${tile.id}`}>
-            <span class="tile-icon" aria-hidden="true">
+          <a key={tile.id} class="tile" href={paths.section(tile.id)} data-testid={`tile-${tile.id}`}>
+            <span class="tile-icon" lang="kn" aria-hidden="true">
               {tile.icon}
             </span>
-            <span class="tile-label">{tile.label}</span>
-            {tile.hint && <span class="tile-hint">{tile.hint}</span>}
+            <span class="tile-label" lang="kn">
+              {tile.labelKn}
+            </span>
+            <span class="tile-label-en">{tile.labelEn}</span>
           </a>
         ))}
       </nav>
