@@ -1,0 +1,84 @@
+# Continuous evals (playbook Test stage): every PR runs the full gate.
+# Pushes to main run it via deploy.yml (workflow_call), so main is gated exactly once before deploying.
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Lint · Typecheck · Unit · Build · Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npx vitest run --coverage.enabled --coverage.reporter=text-summary
+      - run: npm run build
+      - run: npm run size
+      - name: Requirement traceability
+        run: node scripts/check-traceability.mjs
+
+  e2e:
+    name: E2E (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { project: android, browser: chromium }
+          - { project: iphone, browser: webkit }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npx playwright test --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse (mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - run: npx --yes @lhci/cli@0.15.x autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  # Policy breach on main → new intent (playbook: violations become new intent.md files).
+  breach-to-intent:
+    name: Open remediation intent
+    needs: [checks, e2e, lighthouse]
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create intent --color 5319e7 --description "Candidate intent.md" 2>/dev/null || true
+          gh label create policy-breach --color d93f0b 2>/dev/null || true
+          gh issue create \
+            --title "Intent: remediate failing quality gate on main ($(date -u +%F))" \
+            --label intent --label policy-breach \
+            --body "$(printf '**Source:** policy breach (CI on main)\n**Run:** %s\n**Commit:** %s\n\n' "$RUN_URL" "$GITHUB_SHA"; cat docs/intents/TEMPLATE.md)"

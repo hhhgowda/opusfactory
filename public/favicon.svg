@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>OpusFactory</title>
+  <rect width="512" height="512" rx="112" fill="#0f172a"/>
+  <g fill="#38bdf8">
+    <rect x="120" y="120" width="124" height="124" rx="28"/>
+    <rect x="268" y="120" width="124" height="124" rx="28"/>
+    <rect x="120" y="268" width="124" height="124" rx="28"/>
+    <rect x="268" y="268" width="124" height="124" rx="28" fill-opacity=".55"/>
+  </g>
+</svg>

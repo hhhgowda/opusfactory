@@ -1,0 +1,31 @@
+name: New intent
+description: Propose a feature, fix, or remediation. Accepted intents become docs/intents/NNNN-*/intent.md.
+title: 'Intent: '
+labels: [intent]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: What we want, description: The outcome in plain language. }
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes: { label: Why, description: Problem/opportunity and evidence (metrics, feedback, breach). }
+    validations: { required: true }
+  - type: textarea
+    id: constraints
+    attributes: { label: Constraints, description: Platforms, budgets, storage, a11y, privacy, deadlines. }
+  - type: textarea
+    id: out-of-scope
+    attributes: { label: Out of scope }
+  - type: textarea
+    id: success
+    attributes: { label: Success looks like, description: Observable, testable outcomes. }
+    validations: { required: true }
+  - type: dropdown
+    id: source
+    attributes:
+      label: Source
+      options: [feature request, bug, policy breach (hook/CI), metrics finding]
+  - type: markdown
+    attributes:
+      value: 'Tip: comment `@claude run the intent-to-spec skill for this issue` to draft the intent folder in a PR.'

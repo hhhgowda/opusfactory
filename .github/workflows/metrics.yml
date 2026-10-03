@@ -1,0 +1,35 @@
+# Closing the loop on metrics (playbook Maintain stage). Weekly report → job summary + tracking issue.
+# Findings that breach a threshold in docs/metrics.md should become a new intent.
+name: Weekly metrics
+
+on:
+  schedule:
+    - cron: '17 14 * * 1' # Mondays 14:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+  pull-requests: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - name: Collect metrics
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/metrics-report.mjs > metrics.md
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat metrics.md >> "$GITHUB_STEP_SUMMARY"
+          gh label create metrics --color 0e8a16 2>/dev/null || true
+          gh issue create --title "Metrics report $(date -u +%F)" --label metrics --body-file metrics.md

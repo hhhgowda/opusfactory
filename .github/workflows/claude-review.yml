@@ -1,0 +1,46 @@
+# AI in the PR review loop (playbook Deploy stage). First-pass agentic review; humans approve.
+# Requires repo secret ANTHROPIC_API_KEY (or install the Claude GitHub app: `/install-github-app` in Claude Code).
+name: Claude PR review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}  PR: ${{ github.event.pull_request.number }}
+
+            You are the first reviewer for this PR. Read CLAUDE.md, the ADRs in docs/adr/, and the intent
+            folder referenced by the PR (docs/intents/NNNN-*/requirements.md and design.md).
+
+            Review the diff for:
+            1. Traceability — every change maps to a requirement ID in the referenced intent; flag scope creep.
+            2. Tests — each touched FR/NFR has a test named with its ID; tests assert behaviour, not internals.
+            3. Mobile compatibility — iOS Safari 16.4+ and Android Chrome: dvh/safe areas, 44px targets,
+               portrait overlay intact, input font-size ≥ 16px, no unsupported APIs.
+            4. IndexedDB — access only via src/db; existing migrations unchanged (append-only); no non-IDB awaits in transactions.
+            5. Failure shell — FailureShell.tsx stays dependency-free; new async paths can't leave a blank screen.
+            6. PWA — no new runtime third-party requests; SW strategy unchanged unless an ADR says so.
+            7. Correctness, security, and readability.
+
+            Use inline comments for specific lines. Finish with one summary comment:
+            a verdict (✅ ready for human review / ⚠️ changes suggested / ❌ blocking issues) and a short list.
+            If the PR touches src/db/schema.ts, .github/, or .claude/hooks/, say "Needs owner approval (CODEOWNERS)".
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"

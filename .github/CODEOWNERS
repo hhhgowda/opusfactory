@@ -1,0 +1,10 @@
+# Human review is reserved for critical code (playbook: agentic review for routine changes,
+# humans for governance and data). Add teammates or teams as needed.
+# Enable "Require review from Code Owners" in branch protection for main.
+
+/src/db/schema.ts        @hhhgowda
+/.github/                @hhhgowda
+/.claude/settings.json   @hhhgowda
+/.claude/hooks/          @hhhgowda
+/docs/adr/               @hhhgowda
+/vite.config.ts          @hhhgowda
