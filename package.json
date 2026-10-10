@@ -21,7 +21,7 @@
     "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run size"
   },
   "dependencies": {
-    "idb": "^8.0.3",
+    "idb": "^8.0.4",
     "preact": "^11.0.0",
     "preact-iso": "^2.12.2"
   },
